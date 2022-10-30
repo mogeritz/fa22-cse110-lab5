@@ -44,6 +44,9 @@ function init() {
     event.preventDefault();
 
     const utterThis = new SpeechSynthesisUtterance(textInput.value);
+    // if(voiceList.value){
+    //   utterThis.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == voiceSelect.value; })[0];
+    // }
     const selectedOption =
       voiceList.selectedOptions[0].getAttribute("data-name");
     voices.forEach((voice) => {
@@ -51,6 +54,7 @@ function init() {
         utterThis.voice = voices[i];
       }
     });
+
     synth.speak(utterThis);
     faceImg.src = "assets/images/smiling-open.png";
 
