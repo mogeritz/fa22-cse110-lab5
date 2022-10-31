@@ -1,6 +1,6 @@
 # Lab 5 - Starter
-Moritz Wagner
-Linh Nguyen
+Moritz Wagner <br>
+Linh Nguyen <br>
 
 MWagner Github Actions: https://github.com/mogeritz/Lab5_githubactions <br>
 MWagner Github Actions: https://github.com/LinhNguyen9/introduction-to-github <br>
