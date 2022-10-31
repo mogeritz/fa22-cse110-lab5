@@ -3,32 +3,63 @@
 window.addEventListener('DOMContentLoaded', init);
 
 function init() {
-  const speechsynth = window.speechSynthesis;
-  const voiceoptions = speechsynth.getVoices();
-
-  const voiceselect = document.getElementById("voice-select");
-  const text = document.getElementById("text-to-speak");
+  const textInput = document.getElementById("text-to-speak");
+  const voiceList = document.getElementById("voice-select");
   const button = document.getElementsByTagName("button")[0];
-  const img = document.getElementsByTagName("img")[0];
+  const faceImg = document.querySelector("[alt='Smiling face']");
+  const synth = window.speechSynthesis;
+  let voices = [];
 
-  setInterval(() => 
-  {
-    if(speechsynth.speaking) img.src = "assets/images/smiling-open.png";
-    else     img.src = "assets/images/smiling.png";
-  }, 100);
+  function populateVoiceList() {
+    if (typeof speechSynthesis === 'undefined') {
+      return;
+    }
 
-  for(var i = 0; i < voiceoptions.length; i++){
-    var node = document.createElement('option');
-    node.value = voiceoptions[i].name;
-    node.innerHTML = voiceoptions[i].name;
-    voiceselect.appendChild(node);
+    const voices = synth.getVoices();
+    
+    for (let i = 0; i < voices.length; i++) {
+      const option = document.createElement('option');
+      option.textContent = `${voices[i].name} (${voices[i].lang})`;
+  
+      // if (voices[i].default) {
+      //   option.textContent += ' — DEFAULT';
+      // }
+  
+      option.setAttribute('data-lang', voices[i].lang);
+      option.setAttribute('data-name', voices[i].name);
+      voiceList.appendChild(option);
+    }
+  };
+  
+  // call function
+  populateVoiceList();
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoiceList;
   }
 
-  button.addEventListener("click", (event)=>{
-    console.log(voiceselect.value);
-    let utterance = new SpeechSynthesisUtterance(text.value);
-    utterance.voice = voiceoptions.find((a,b,c)=>{a.name == voiceselect.value});
-    speechsynth.speak(utterance);
-  });
+  // speak
+  button.addEventListener('click', (event) => {
+    voices = synth.getVoices();
+    event.preventDefault();
 
+    const utterThis = new SpeechSynthesisUtterance(textInput.value);
+    // if(voiceList.value){
+    //   utterThis.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == voiceSelect.value; })[0];
+    // }
+    const selectedOption =
+      voiceList.selectedOptions[0].getAttribute("data-name");
+    voices.forEach((voice) => {
+      if (voice === selectedOption){
+        utterThis.voice = voices[i];
+      }
+    });
+
+    synth.speak(utterThis);
+    faceImg.src = "assets/images/smiling-open.png";
+
+    // stop speaking
+    utterThis.addEventListener('end', (event) => {
+      faceImg.src = "assets/images/smiling.png";
+    });
+  });
 }
