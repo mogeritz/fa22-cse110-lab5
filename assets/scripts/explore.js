@@ -3,7 +3,6 @@
 window.addEventListener('DOMContentLoaded', init);
 
 function init() {
-  
   const textInput = document.getElementById("text-to-speak");
   const voiceList = document.getElementById("voice-select");
   const button = document.getElementsByTagName("button")[0];
